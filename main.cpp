@@ -7,6 +7,7 @@
 
 int main() {
     Matrix* matrix = new Mat2x2();
-    std::cout << (matrix->isAlmostEqual(0, 0)) << std::endl;
+    std::cout << (Matrix::isAlmostEqual(1e-6, 1.5e-6)) << std::endl;
+    std::cout << (Matrix::isNotAlmostEqual(1e-6, 1.5e-6)) << std::endl;
     return 0;
 }

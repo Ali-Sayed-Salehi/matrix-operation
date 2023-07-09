@@ -6,11 +6,23 @@
 #define MATRIX_OPERATION_MATRIX_H
 
 
+#include <istream>
+
 class Matrix {
 
 public:
     static bool isAlmostEqual(
-            const double& first, const double& second, const double& epsilon = 1.0e-6) ;
+            double first, double second, double epsilon = 1.0e-6) ;
+
+    static bool isNotAlmostEqual(
+            double first, double second, double epsilon = 1.0e-6) ;
+
+    virtual std::istream& operator>>(std::istream& is) = 0;
+    virtual std::ostream& operator<<(std::ostream& os) const = 0;
+
+
+    virtual Matrix operator+(const Matrix& other) const = 0;
+
 };
 
 
