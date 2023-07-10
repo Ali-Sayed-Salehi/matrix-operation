@@ -9,7 +9,7 @@
 Mat2x2::Mat2x2(): matrix(array< array<double, 2>, 2>()) {
 }
 
-Mat2x2::Mat2x2(double a00, double a01, double a10, double a11):
+Mat2x2::Mat2x2(const double& a00, const double& a01, const double& a10, const double& a11):
     matrix(array< array<double, 2>, 2>({a00, a01, a10, a11})) {
 }
 /*
@@ -34,21 +34,6 @@ std::ostream &Mat2x2::operator<<(std::ostream &os, const Mat2x2 &target) const {
         os << std::endl;
     }
     return os;
-}
-*/
-
-/*
-
-Mat2x2 Mat2x2::operator+(const Mat2x2 &other) const {
-
-    Mat2x2 sumMatrix{};
-    for (int i = 0; i < matrix.size(); ++i) {
-        for (int j = 0; j < matrix[i].size(); ++j) {
-            sumMatrix.matrix[i][j] = matrix[i][j] + other.matrix[i][j];
-        }
-    }
-
-    return sumMatrix;
 }
 */
 
@@ -105,7 +90,7 @@ Mat2x2 Mat2x2::subtract(const Mat2x2 &a, const Mat2x2 &b) {
     return result;
 }
 
-Mat2x2 Mat2x2::addScalar(double s, const Mat2x2 &a) {
+Mat2x2 Mat2x2::addScalar(const double& s, const Mat2x2 &a) {
     Mat2x2 result{};
     for (int i = 0; i < a.matrix.size(); ++i) {
         for (int j = 0; j < a.matrix[i].size(); ++j) {
@@ -115,7 +100,7 @@ Mat2x2 Mat2x2::addScalar(double s, const Mat2x2 &a) {
     return result;
 }
 
-Mat2x2 Mat2x2::subtractScalar(double s, const Mat2x2 &a) {
+Mat2x2 Mat2x2::subtractScalar(const double& s, const Mat2x2 &a) {
     Mat2x2 result{};
     for (int i = 0; i < a.matrix.size(); ++i) {
         for (int j = 0; j < a.matrix[i].size(); ++j) {
@@ -125,7 +110,7 @@ Mat2x2 Mat2x2::subtractScalar(double s, const Mat2x2 &a) {
     return result;
 }
 
-Mat2x2 Mat2x2::subtractScalar(const Mat2x2 &a, double s) {
+Mat2x2 Mat2x2::subtractScalar(const Mat2x2 &a, const double& s) {
     Mat2x2 result{};
     for (int i = 0; i < a.matrix.size(); ++i) {
         for (int j = 0; j < a.matrix[i].size(); ++j) {
@@ -151,3 +136,156 @@ Mat2x2 Mat2x2::multiply(const Mat2x2 &a, const Mat2x2 &b) {
     }
     return result;
 }
+
+const double &Mat2x2::operator[](const int& index) const {
+    switch (index) {
+        case 1:
+            return matrix[0][0];
+        case 2:
+            return matrix[0][1];
+        case 3:
+            return matrix[1][0];
+        case 4:
+            return matrix[1][1];
+        default:
+            throw std::invalid_argument("index out of bounds");
+    }
+}
+
+double &Mat2x2::operator[](const int& index) {
+    switch (index) {
+        case 1:
+            return matrix[0][0];
+        case 2:
+            return matrix[0][1];
+        case 3:
+            return matrix[1][0];
+        case 4:
+            return matrix[1][1];
+        default:
+            throw std::invalid_argument("index out of bounds");
+    }
+}
+
+bool operator==(const Mat2x2 &lhs, const Mat2x2& rhs) {
+
+    auto lhsMatrix = lhs.getMatrix();
+    auto rhsMatrix = rhs.getMatrix();
+
+    for (int i = 0; i < lhsMatrix.size(); ++i) {
+        for (int j = 0; j < lhsMatrix[i].size(); ++j) {
+            if (lhsMatrix[i][j] != rhsMatrix[i][j]) return false;
+        }
+    }
+
+    return true;
+}
+
+bool operator!=(const Mat2x2 &lhs, const Mat2x2& rhs) {
+    return !(lhs == rhs);
+}
+
+Mat2x2 Mat2x2::operator+() {
+    return *this;
+}
+
+Mat2x2 Mat2x2::operator-() {
+    Mat2x2 result{};
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (int j = 0; j < matrix[i].size(); ++j) {
+            result.matrix[i][j] = - matrix[i][j];
+        }
+    }
+    return result;
+}
+
+Mat2x2 operator+(const Mat2x2& matrix1, const Mat2x2& matrix2){
+    Mat2x2 temp{matrix1};
+    temp += matrix2;
+    return temp;
+}
+Mat2x2 operator+(const Mat2x2& matrix1, const double& scalar){
+    Mat2x2 temp{matrix1};
+    temp += scalar;
+    return temp;
+}
+
+Mat2x2 operator+(const double& scalar, const Mat2x2& matrix1){
+    Mat2x2 temp{matrix1};
+    temp += scalar;
+    return temp;
+}
+
+Mat2x2 &Mat2x2::operator+=(const Mat2x2 &rhs) {
+    *this = Mat2x2::add(*this, rhs);
+    return *this;
+}
+
+Mat2x2 operator-(const Mat2x2& matrix1, const Mat2x2& matrix2){
+    Mat2x2 temp{matrix1};
+    temp -= matrix2;
+    return temp;
+}
+
+Mat2x2 operator-(const Mat2x2& matrix1, const double& scalar){
+    Mat2x2 temp{matrix1};
+    temp -= scalar;
+    return temp;
+}
+
+Mat2x2 operator-(const double& scalar, const Mat2x2& matrix1){
+    return Mat2x2::subtractScalar(scalar, matrix1);
+}
+
+Mat2x2 &Mat2x2::operator-=(const Mat2x2 &rhs) {
+    *this = Mat2x2::subtract(*this, rhs);
+    return *this;
+}
+
+Mat2x2 &Mat2x2::operator*=(const double& scalar) {
+    *this = Mat2x2::multiplyByScalar(*this, scalar);
+    return *this;
+}
+
+Mat2x2 Mat2x2::multiplyByScalar(const double& s, const Mat2x2 &a) {
+    Mat2x2 result{};
+    for (int i = 0; i < a.matrix.size(); ++i) {
+        for (int j = 0; j < a.matrix[i].size(); ++j) {
+            result.matrix[i][j] = s * a.matrix[i][j];
+        }
+    }
+    return result;
+}
+
+Mat2x2 Mat2x2::multiplyByScalar(const Mat2x2 &a, const double& s) {
+    return multiplyByScalar(s, a);
+}
+
+Mat2x2 &Mat2x2::operator*=(const Mat2x2 &rhs) {
+    *this = Mat2x2::multiply(*this, rhs);
+    return *this;
+}
+
+Mat2x2 &Mat2x2::operator+=(const double& scalar) {
+    *this = Mat2x2::addScalar(*this, scalar);
+    return *this;
+}
+
+Mat2x2 Mat2x2::addScalar(const Mat2x2 &a, const double &s) {
+    return Mat2x2::addScalar(s, a);
+}
+
+Mat2x2 &Mat2x2::operator-=(const double &scalar) {
+    *this = Mat2x2::subtractScalar(*this, scalar);
+    return *this;
+}
+
+
+
+
+/*
+
+Mat2x2 &Mat2x2::operator++() {
+    return addScalar(1, *this);
+}
+*/
