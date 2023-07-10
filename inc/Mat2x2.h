@@ -74,11 +74,14 @@ Mat2x2 operator+(const Mat2x2& matrix1, const Mat2x2& matrix2);
 Mat2x2 operator-(const Mat2x2& matrix1, const Mat2x2& matrix2);
 Mat2x2 operator-(const Mat2x2& matrix1, const double& scalar);
 Mat2x2 operator-(const double& scalar, const Mat2x2& matrix1);
-/*
 
-std::istream& operator>>(std::istream& is);
-std::ostream& operator<<(std::ostream& os, const Mat2x2 &target) const;
-*/
+Mat2x2 operator*(const Mat2x2& matrix1, const Mat2x2& matrix2);
+Mat2x2 operator*(const Mat2x2& matrix1, const double& scalar);
+Mat2x2 operator*(const double& scalar, const Mat2x2& matrix1);
+
+// input/output operators
+std::istream& operator>>(std::istream& is, Mat2x2 &target);
+std::ostream& operator<<(std::ostream& os, const Mat2x2 &target);
 
 bool isAlmostEqual(
         double first, double second, double epsilon = 1.0e-6) ;

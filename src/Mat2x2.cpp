@@ -12,30 +12,6 @@ Mat2x2::Mat2x2(): matrix(array< array<double, 2>, 2>()) {
 Mat2x2::Mat2x2(const double& a00, const double& a01, const double& a10, const double& a11):
     matrix(array< array<double, 2>, 2>({a00, a01, a10, a11})) {
 }
-/*
-
-std::istream &Mat2x2::operator>>(std::istream &is) {
-    for (auto& row : matrix) {
-        for (auto& element : row) {
-            is >> element;
-        }
-    }
-    return is;
-}
-*/
-
-/*
-
-std::ostream &Mat2x2::operator<<(std::ostream &os, const Mat2x2 &target) const {
-    for (auto& row : target.matrix) {
-        for (auto& element : row) {
-            os << element << " ";
-        }
-        os << std::endl;
-    }
-    return os;
-}
-*/
 
 const array<array<double, 2>, 2> &Mat2x2::getMatrix() const {
     return matrix;
@@ -280,12 +256,52 @@ Mat2x2 &Mat2x2::operator-=(const double &scalar) {
     return *this;
 }
 
-
-
-
-/*
-
 Mat2x2 &Mat2x2::operator++() {
-    return addScalar(1, *this);
+    *this = Mat2x2::addScalar(*this, 1);
+    return *this;
 }
-*/
+
+Mat2x2 Mat2x2::operator++(int) {
+    Mat2x2 temp(*this);
+    operator++(); // pre-increment this instance
+    return temp;
+}
+
+Mat2x2 &Mat2x2::operator--() {
+    *this = Mat2x2::subtractScalar(*this, 1);
+    return *this;
+}
+
+Mat2x2 Mat2x2::operator--(int) {
+    Mat2x2 temp(*this);
+    operator--(); // pre-increment this instance
+    return temp;
+}
+
+std::istream& operator>>(std::istream& is, Mat2x2 &target){
+    target.read(is);
+    return is;
+}
+
+std::ostream& operator<<(std::ostream& os, const Mat2x2 &target){
+    target.write(os);
+    return os;
+}
+
+Mat2x2 operator*(const Mat2x2& matrix1, const Mat2x2& matrix2){
+    Mat2x2 temp{matrix1};
+    temp *= matrix2;
+    return temp;
+}
+
+Mat2x2 operator*(const Mat2x2& matrix1, const double& scalar){
+    Mat2x2 temp{matrix1};
+    temp *= scalar;
+    return temp;
+}
+
+Mat2x2 operator*(const double& scalar, const Mat2x2& matrix1){
+    Mat2x2 temp{matrix1};
+    temp *= scalar;
+    return temp;
+}
