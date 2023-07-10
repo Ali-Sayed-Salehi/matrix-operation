@@ -40,6 +40,10 @@ public:
     static Mat2x2 multiplyByScalar(const double& s, const Mat2x2& a); // s * a
     static Mat2x2 multiplyByScalar(const Mat2x2& a, const double& s); // a * s
 
+    static Mat2x2 divide(const Mat2x2& matrix1, const Mat2x2& matrix2) ; // m1/m2
+    static Mat2x2 divideScalar(const double& scalar, const Mat2x2& matrix1) ; // s/m1
+    static Mat2x2 divideScalar(const Mat2x2& matrix1, const double& scalar) ; // m1/s
+
     // overloading the subscript operator
     const double& operator[] (const int& index) const; // serves const objects
     double& operator[] (const int& index);         // serves non-const objects
@@ -54,6 +58,8 @@ public:
     Mat2x2& operator-= (const double& scalar);
     Mat2x2& operator*= (const double& scalar);
     Mat2x2& operator*= (const Mat2x2& rhs);
+    Mat2x2& operator/= (const double& scalar);
+    Mat2x2& operator/= (const Mat2x2& rhs);
 
     // unary operators
     Mat2x2& operator++(); // ++Mat2x2
@@ -69,12 +75,11 @@ public:
 
     double determinant() const;
     double trace() const;
-    Mat2x2& transpose();
+    Mat2x2 transpose() const;
     bool isSymmetric() const;
     bool isSimilar(const Mat2x2& other) const;
     bool isInvertible() const;
-    Mat2x2& inverse();
-
+    Mat2x2 inverse() const;
 };
 
 // overloading relational equality operators
@@ -93,6 +98,10 @@ Mat2x2 operator-(const double& scalar, const Mat2x2& matrix1);
 Mat2x2 operator*(const Mat2x2& matrix1, const Mat2x2& matrix2);
 Mat2x2 operator*(const Mat2x2& matrix1, const double& scalar);
 Mat2x2 operator*(const double& scalar, const Mat2x2& matrix1);
+
+Mat2x2 operator/(const Mat2x2& matrix1, const Mat2x2& matrix2);
+Mat2x2 operator/(const Mat2x2& matrix1, const double& scalar);
+Mat2x2 operator/(const double& scalar, const Mat2x2& matrix1);
 
 // input/output operators
 std::istream& operator>>(std::istream& is, Mat2x2 &target);

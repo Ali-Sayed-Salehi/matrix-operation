@@ -144,13 +144,12 @@ double &Mat2x2::operator[](const int& index) {
 }
 
 bool operator==(const Mat2x2 &lhs, const Mat2x2& rhs) {
-
     auto lhsMatrix = lhs.getMatrix();
     auto rhsMatrix = rhs.getMatrix();
 
     for (int i = 0; i < lhsMatrix.size(); ++i) {
         for (int j = 0; j < lhsMatrix[i].size(); ++j) {
-            if (lhsMatrix[i][j] != rhsMatrix[i][j]) return false;
+            if (isNotAlmostEqual(lhsMatrix[i][j], rhsMatrix[i][j])) return false;
         }
     }
 
@@ -286,10 +285,9 @@ double Mat2x2::trace() const {
     return matrix[0][0] + matrix[1][1];
 }
 
-Mat2x2 &Mat2x2::transpose() {
+Mat2x2 Mat2x2::transpose() const {
     Mat2x2 temp{matrix[0][0], matrix[1][0], matrix[0][1], matrix[1][1]};
-    *this = temp;
-    return *this;
+    return temp;
 }
 
 bool Mat2x2::isSymmetric() const {
@@ -311,12 +309,11 @@ bool Mat2x2::isInvertible() const {
     return isNotAlmostEqual(detA, 0);
 }
 
-Mat2x2 &Mat2x2::inverse() {
+Mat2x2 Mat2x2::inverse() const {
     if (!(this -> isInvertible())) throw std::overflow_error("Inverse undefined");
     Mat2x2 temp{matrix[1][1], -matrix[0][1], -matrix[1][0], matrix[1][1]};
     auto determinant = this -> determinant();
-    *this = Mat2x2::multiplyByScalar(1/determinant, temp);
-    return *this;
+    return Mat2x2::multiplyByScalar(1/determinant, temp);
 }
 
 bool Mat2x2::operator!() const {
@@ -329,6 +326,40 @@ double Mat2x2::operator()() const {
 
 Mat2x2::operator bool() const {
     return this -> isInvertible();
+}
+
+Mat2x2 Mat2x2::divide(const Mat2x2 &matrix1, const Mat2x2 &matrix2) {
+    // A * bˆ-1
+    if (!matrix2.isInvertible()) {
+        throw std::overflow_error("cannot divide: Inverse undefined");
+    }
+    return Mat2x2::multiply(matrix1, matrix2.inverse());
+}
+
+Mat2x2 Mat2x2::divideScalar(const double &scalar, const Mat2x2 &matrix1) {
+    //s * aˆ-1
+    if (!matrix1.isInvertible()) {
+        throw std::overflow_error("cannot divide: Inverse undefined");
+    }
+    return multiplyByScalar(scalar, matrix1.inverse());
+}
+
+Mat2x2 Mat2x2::divideScalar(const Mat2x2 &matrix1, const double &scalar) {
+    // a * 1/x
+    if (isAlmostEqual(scalar, 0)) {
+        throw std::overflow_error("cannot divide: scalar is almost zero");
+    }
+    return multiplyByScalar(matrix1, 1 / scalar);
+}
+
+Mat2x2 &Mat2x2::operator/=(const double &scalar) {
+    *this = Mat2x2::divideScalar(*this, scalar);
+    return *this;
+}
+
+Mat2x2 &Mat2x2::operator/=(const Mat2x2 &rhs) {
+    *this = Mat2x2::divide(*this, rhs);
+    return *this;
 }
 
 std::istream& operator>>(std::istream& is, Mat2x2 &target){
@@ -357,4 +388,20 @@ Mat2x2 operator*(const double& scalar, const Mat2x2& matrix1){
     Mat2x2 temp{matrix1};
     temp *= scalar;
     return temp;
+}
+
+Mat2x2 operator/(const Mat2x2& matrix1, const Mat2x2& matrix2){
+    Mat2x2 temp{matrix1};
+    temp /= matrix2;
+    return temp;
+}
+
+Mat2x2 operator/(const Mat2x2& matrix1, const double& scalar){
+    Mat2x2 temp{matrix1};
+    temp /= scalar;
+    return temp;
+}
+
+Mat2x2 operator/(const double& scalar, const Mat2x2& matrix1){
+    return Mat2x2::divideScalar(scalar, matrix1);
 }
