@@ -6,4 +6,6 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(.)
 
 add_executable(matrix_operation
-        main.cpp)
+        main.cpp
+        inc/Mat2x2.h
+        src/Mat2x2.cpp)

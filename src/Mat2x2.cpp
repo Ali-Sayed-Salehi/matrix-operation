@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <iomanip>
 #include "inc/Mat2x2.h"
 
 
@@ -31,10 +32,11 @@ bool isNotAlmostEqual(double first,
 
 void Mat2x2::write(std::ostream &os) const {
     for (auto& row : matrix) {
+        os << "|  ";
         for (auto& element : row) {
-            os << element << " ";
+            os << std::left << " " << std::setw(8) << element;
         }
-        os << std::endl;
+        os << "|" << std::endl;
     }
 }
 
@@ -115,13 +117,13 @@ Mat2x2 Mat2x2::multiply(const Mat2x2 &a, const Mat2x2 &b) {
 
 const double &Mat2x2::operator[](const int& index) const {
     switch (index) {
-        case 1:
+        case 0:
             return matrix[0][0];
-        case 2:
+        case 1:
             return matrix[0][1];
-        case 3:
+        case 2:
             return matrix[1][0];
-        case 4:
+        case 3:
             return matrix[1][1];
         default:
             throw std::invalid_argument("index out of bounds");
@@ -130,13 +132,13 @@ const double &Mat2x2::operator[](const int& index) const {
 
 double &Mat2x2::operator[](const int& index) {
     switch (index) {
-        case 1:
+        case 0:
             return matrix[0][0];
-        case 2:
+        case 1:
             return matrix[0][1];
-        case 3:
+        case 2:
             return matrix[1][0];
-        case 4:
+        case 3:
             return matrix[1][1];
         default:
             throw std::invalid_argument("index out of bounds");
