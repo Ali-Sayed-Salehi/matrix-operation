@@ -44,6 +44,9 @@ public:
     const double& operator[] (const int& index) const; // serves const objects
     double& operator[] (const int& index);         // serves non-const objects
 
+    // overloading function call operator
+    double operator()() const;
+
     // overloading compound operators
     Mat2x2& operator+= (const Mat2x2& rhs);
     Mat2x2& operator+= (const double& scalar);
@@ -59,6 +62,18 @@ public:
     Mat2x2 operator--(int); // Mat2x2--
     Mat2x2 operator- (); // -Mat2x2
     Mat2x2 operator+ (); // +Mat2x2
+    bool operator!() const;
+
+    // conversion operator
+    explicit operator bool() const;
+
+    double determinant() const;
+    double trace() const;
+    Mat2x2& transpose();
+    bool isSymmetric() const;
+    bool isSimilar(const Mat2x2& other) const;
+    bool isInvertible() const;
+    Mat2x2& inverse();
 
 };
 

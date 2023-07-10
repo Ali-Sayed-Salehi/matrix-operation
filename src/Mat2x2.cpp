@@ -278,6 +278,59 @@ Mat2x2 Mat2x2::operator--(int) {
     return temp;
 }
 
+double Mat2x2::determinant() const {
+    return (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]);
+}
+
+double Mat2x2::trace() const {
+    return matrix[0][0] + matrix[1][1];
+}
+
+Mat2x2 &Mat2x2::transpose() {
+    Mat2x2 temp{matrix[0][0], matrix[1][0], matrix[0][1], matrix[1][1]};
+    *this = temp;
+    return *this;
+}
+
+bool Mat2x2::isSymmetric() const {
+    return matrix[0][1] == matrix[1][0];
+}
+
+bool Mat2x2::isSimilar(const Mat2x2& other) const {
+    auto detA = this -> determinant();
+    auto detB = other.determinant();
+    auto traceA = this -> trace();
+    auto traceB = other.trace();
+    return (isAlmostEqual(detA, detB) && isAlmostEqual(traceA, traceB));
+
+}
+
+bool Mat2x2::isInvertible() const {
+    auto detA = this -> determinant();
+    isNotAlmostEqual(detA, 0);
+    return isNotAlmostEqual(detA, 0);
+}
+
+Mat2x2 &Mat2x2::inverse() {
+    if (!(this -> isInvertible())) throw std::overflow_error("Inverse undefined");
+    Mat2x2 temp{matrix[1][1], -matrix[0][1], -matrix[1][0], matrix[1][1]};
+    auto determinant = this -> determinant();
+    *this = Mat2x2::multiplyByScalar(1/determinant, temp);
+    return *this;
+}
+
+bool Mat2x2::operator!() const {
+    return !(this -> isInvertible());
+}
+
+double Mat2x2::operator()() const {
+    return this -> determinant();
+}
+
+Mat2x2::operator bool() const {
+    return this -> isInvertible();
+}
+
 std::istream& operator>>(std::istream& is, Mat2x2 &target){
     target.read(is);
     return is;
