@@ -22,14 +22,6 @@ The test starts with matrix
 
 
 int main() {
-    /*Mat2x2 matrix1{1, 1, 1, 1};
-    Mat2x2 matrix2{0, 0, 0, 0};
-    std::cout << (isAlmostEqual(1e-6, 1.5e-6)) << std::endl;
-    std::cout << (isNotAlmostEqual(1e-6, 1.5e-6)) << std::endl;
-
-    Mat2x2 sum = matrix1 + matrix2;
-
-    std::cout << sum << std::endl;*/
 
     Mat2x2 m1(2, -1, 1, 2); // test constructor
     cout << "m1\n" << m1 << endl;    // operator<<, the output operator
@@ -59,7 +51,6 @@ int main() {
         cout << "m1 is not invertible\n" << m1 << endl;
     }
     cout << "\n";
-
     if (!m1)
     {
         cout << "m1 is not invertible\n" << m1 << endl;
@@ -74,10 +65,10 @@ int main() {
     assert(m2 == Mat2x2(3, 0, 2, 3));
     cout << "m2\n" << m2 << endl;
 
-    m2 = 1 + m1; //op=,int+Mat
+    m2 = 1 + m1;  // op=, int + Mat
     assert(m2 == Mat2x2(3, 0, 2, 3));
 
-    Mat2x2 m3=m2-1; //Mat-int
+    Mat2x2 m3 = m2 - 1;  // Mat -int
     assert(m3 == m1);
     cout << "m3\n" << m3 << endl;
 
@@ -85,16 +76,16 @@ int main() {
     cout << "m4\n" << m4 << endl;
     assert(m4 == Mat2x2(-1, 2, 0, -1));
 
-    Mat2x2 m5= m4*5;//Mat*int
+    Mat2x2 m5 =  m4 * 5 ; // Mat * int
     cout << "m5\n" << m5 << endl;
     assert(m5 == Mat2x2(-5, 10, 0, -5));
 
-    Mat2x2 m6=10* m5;//int*Mat
+    Mat2x2 m6 = 10 *  m5; // int * Mat
     cout << "m6\n" << m6 << endl;
     assert(m6 == Mat2x2(-50, 100, 0, -50));
-    assert(m6 / 10 == m5); // Mat / int
-    assert(10/m6 == 10*m6.inverse()); // int / Mat, inverse
-    assert(5*m4 *10==m6); //int*Mat*int==Mat
+    assert(m6 / 10 == m5);  // Mat / int
+    assert(10/m6  == 10*m6.inverse());  // int / Mat, inverse
+    assert(5 * m4  * 10 == m6);  // int * Mat * int == Mat
 
     Mat2x2 m7 = m1++;
     cout << "m1\n" << m1 << endl;
@@ -105,7 +96,6 @@ int main() {
     cout << "m1\n" << m1 << endl;
     cout << "m8\n" << m8 << endl;
     assert(m8 == m1 );
-
     m8--;  // Mat--
     cout << "m8\n" << m8 << endl;
     assert(m1 == 1 + m8);
@@ -114,12 +104,11 @@ int main() {
     assert(2 * m1 == m8 + m1 + 1);
     assert(m1 * m1 == m1 *(1 + m8));
     cout << "m8 is " << (m8.isSymmetric() ? "" : "not") << " symmetric\n";
-
     Mat2x2 m9(123, 6, 6, 4567.89);
     cout << "m9\n" << m9 << endl;
     cout << "m9 is " << (m9.isSymmetric() ? "" : "not") << " symmetric\n";
 
-// subscripts (non-const)
+    // subscripts (non-const)
     m9[0] = 3;
     m9[1] = 1;
     m9[2] = 7;
@@ -130,12 +119,14 @@ int main() {
     cout << "det(m9) =   " << m9() << "\ntrace(m9) = " << m9.trace() << "\n\n";
     cout << "m9 is " << (m9.isSimilar(m1) ? "" : "not") << " similar to m1\n";
 
-// subscripts (const version)
+    // subscripts (const version)
     const Mat2x2 cm9{ m9 };
     cout << "cm9\n" << cm9 << endl;
+
     m9 += m9;
     cout << "m9\n" << m9 << endl;
     assert(m9 == 2 * Mat2x2(3, 1, 7, 4));
+
     Mat2x2 m10;
     m10 += (m9 / 2);
     cout << "m10\n" << m10 << endl;
@@ -144,12 +135,15 @@ int main() {
     m10 *= 2;
     cout << "m10\n" << m10 << endl;
     assert(m10 == m9);
+
     m10 /= 2;
     cout << "m10\n" << m10 << endl;
     assert(m10 == m9/2);
+
     m10 += 10;
     cout << "m10\n" << m10 << endl;
     assert(m10 == (m9 +20) / 2);
+
     m10 -= 10;
     cout << "m10\n" << m10 << endl;
     assert(m10 == 0.5 * m9);
@@ -161,8 +155,10 @@ int main() {
 
     //testing operator>>
     Mat2x2 m12;
+
     cout << "In response to the following prompt, \n";
     cout << "enter the numbers 10, 20, 30, 40, in that order\n\n";
+
     std::cin >> m12;
     cout << "\nm12\n" << m12 << endl;
     if (m11)  // show off converting a matrix m11 to a bool
@@ -175,6 +171,7 @@ int main() {
     Mat2x2 m13 = -m11;
     cout << "m13\n" << m13 << endl;
     assert(+m11 == -m13);
+
     cout << "Test completed successfully!" << endl;
     return 0;
 }
